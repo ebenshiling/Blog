@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 from store.models import Product
 from .models import Cart,CartItem
 from django.http import HttpResponse
@@ -48,22 +49,27 @@ def remove_cart_item(request,product_id):
         cart_item.delete()
      
     return redirect('cart')   # get the cart using the cart_id present in the session      
-def cart(request, total = 0, quantity = 0, cart_items = None):
+def cart(request, total=0, quantity=0, cart_items=None):
+    tax = 0  # Initialize tax to a default value
+    grand_total = 0  # Initialize grand_total to a default value
     try:
-        cart = Cart.objects.get(cart_id=_cart_id(request)) # get the cart using the cart_id present in the session
-        cart_items = CartItem.objects.filter(cart=cart, is_active=True) # get the cart items from the cart id
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+        cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity) # total price
-            quantity += cart_item.quantity # total quantity
-        tax = (2 * total)/100
-        grand_total = total + tax    
+            total += (cart_item.product.price * cart_item.quantity)
+            quantity += cart_item.quantity
+        tax = (2 * total) / 100
+        grand_total = total + tax
     except ObjectDoesNotExist:
-        pass # just ignore 
+        # If the cart does not exist, you can decide what to do here.
+        # Maybe you want to display a message that the cart is empty.
+        pass  # just ignore
+
     context = {
-        'total':total,
-        'quantity':quantity,
-        'cart_items':cart_items,
-        'tax':tax,
-        'grand_total':grand_total
-    }       
-    return render(request,'store/cart.html',context)         
+        'total': total,
+        'quantity': quantity,
+        'cart_items': cart_items,
+        'tax': tax,
+        'grand_total': grand_total
+    }
+    return render(request, 'store/cart.html', context)         
