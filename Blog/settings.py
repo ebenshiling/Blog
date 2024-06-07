@@ -11,6 +11,17 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
+
+
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +52,7 @@ INSTALLED_APPS = [
     'accounts',
     'store',
     'cart',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +164,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 # Credentials (if needed)
 EMAIL_HOST_USER = 'baeshilling@gmail.com'
 EMAIL_HOST_PASSWORD = 'nokqujxebazfsvll'
+
+# d:/Learning Django and projects/Blog App/Blog/settings.py
+STRIPE_PUBLIC_KEY = 'pk_test_51PEwENEMKhA1kqzwTSnB3X7uxp6jPw5p5hzepu8Ez9w6nO783oyGZmUUL9eBge4zIb6prnmr52BGVrZQAH2n74qr00lqN6EWOA'
+STRIPE_SECRET_KEY = 'sk_test_51PEwENEMKhA1kqzwjqkF2kjFbrGr5NXfyB04JaG5WjiGunNd05NR88L38eoge5HOuPC3tVL0LPcqivDSW6nv47sw00yaDHGC3b'
+STRIPE_WEBHOOK_SECRET_KEY = 'whsec_7eYbP9x3Ry9V0bDhjU6zq4WtG6WpQqRJ'
+

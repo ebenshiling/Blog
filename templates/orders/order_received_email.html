@@ -1,0 +1,50 @@
+{% autoescape off %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6;">
+    <div style="width: 80%; margin: auto; padding: 20px;">
+        <div style="background-color: #f4f4f4; padding: 10px; text-align: center;">
+            <h2>Order Confirmation</h2>
+        </div>
+        <div style="margin-top: 20px;">
+            <p>Hi {{ user.first_name }},</p>
+            <p>Thank you for your order! We've received your order and will begin processing it soon. Your order details are below:</p>
+
+            <h3>Order ID: {{ order.order_number }}</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left; background-color: #f4f4f4;">Product Name</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left; background-color: #f4f4f4;">Quantity</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; text-align: left; background-color: #f4f4f4;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.orderproduct_set.all %}
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; text-align: left;">{{ item.product }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd; text-align: left;">{{ item.quantity }}</td>
+                        <td style="padding: 10px; border: 1px solid #ddd; text-align: left;">${{ item.product_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+           
+            <p>Tax: ${{ order.tax }}</p>
+            <p><strong> Total: ${{ order.order_total }}</strong></p>
+
+            <p>If you have any questions about your order, please contact us at <a href="mailto:Techgear@gmail.com">Techgear@gmail.com</a>.</p>
+        </div>
+        <div style="background-color: #f4f4f4; padding: 10px; text-align: center; margin-top: 20px;">
+            <p>&copy; {{ current_year }} Tech Gear. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+{% endautoescape %}

@@ -1,0 +1,262 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %}
+
+
+
+<section class="section-content padding-y bg">
+    <div class="container">
+    
+    <!-- ============================ COMPONENT 1 ================================= -->
+    <h4 class="text-center mb-10">Review your order and Make Payments </h4>
+    <div class="row">
+        
+        <aside class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                <h5 class="card-header">Billing address</h5>
+                </div>
+                <div class="card-body">
+                  
+                  <p class="card-text">{{order.full_name}}</p> 
+                  <p class="card-text">{{order.full_address}}</p> 
+                  <p class="card-text">{{order.city}}</p> <p class="card-text">{{order.state}}</p> 
+                  <p class="card-text">{{order.country}}</p> 
+                  {%if order.order_note%} 
+                  <b>Order Note:</b> {{order.order_note}}
+                  {%endif%}
+                  <p class="card-text">{{order.email}}</p>
+                  <p class="card-text">{{order.phone}}</p>
+                  
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                <h5 class="card-header">Payment Method</h5>
+                </div>
+                <div class="card-body">
+                  
+                  <p class="card-text"><i class="fas fa-stripe fa-sm fa-fw"></i>Stripe</p>
+                  
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                <h5 class="card-header">Review Products</h5>
+                </div>
+                <div class="card-body">
+                  
+                    <table class="table table-borderless table-shopping-cart">
+                        <thead class="text-muted">
+                        <tr class="small text-uppercase">
+                          <th scope="col">Product</th>
+                          <th scope="col" width="120">Quantity</th>
+                          <th scope="col" width="120">Price</th>
+                         
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for cart_item in cart_items %}
+                        <tr>
+                            <td>
+                                <figure class="itemside align-items-center">
+                                    <div class="aside"><img src="{{cart_item.product.images.url}}" class="img-sm"></div>
+                                    <figcaption class="info">
+                                        <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{cart_item.product.product_name}}</a>
+                                        <p class="text-muted small">
+                                            
+                                        </p>
+                                    </figcaption>
+                                </figure>
+                            </td>
+                            <td> 
+                                <!-- col.// -->
+                                <label for="" >{{cart_item.quantity}}</label>
+                                            
+                            </td>
+                            <td> 
+                                <div class="price-wrap"> 
+                                    <var class="price">GHS {{cart_item.sub_total}}</var> 
+                                    <small class="text-muted"> GHS {{cart_item.product.price}} each </small> 
+                                </div> <!-- price-wrap .// -->
+                            </td>
+                           
+                        </tr>
+                       {% endfor %}
+                       
+                        </tbody>
+                        </table>
+                     
+                      
+                  
+                  
+                </div>
+              </div>
+      
+      
+    
+        </aside> <!-- col.// -->
+        <aside class="col-lg-4">
+    
+            <div class="card">
+            <div class="card-body">
+                <dl class="dlist-align">
+                  <dt>Total price:</dt>
+                  <dd class="text-right"> GHS {{total}}</dd>
+                </dl>
+                <dl class="dlist-align">
+                  <dt>Tax:</dt>
+                  <dd class="text-right"> GHS {{tax}}</dd>
+                </dl>
+                <dl class="dlist-align">
+                  <dt> Grand Total:</dt>
+                  <dd class="text-right text-dark b"><strong> GHS {{grand_total}}</strong></dd>
+                </dl>
+                <hr>
+                <p class="text-center mb-3">
+                  <img src="{% static 'images/misc/payments.png' %}" height="26">
+               </p>
+
+               <form action="{% url 'create_charge' %}" method="post" id="payment-form">
+                {% csrf_token %}
+               
+                <div class="form-group">
+                  <div id="card-element" class="form-control"></div> <!-- Added class form-control for styling -->
+                  <div id="card-errors" role="alert" class="text-danger mt-2"></div> <!-- Text-danger for error messages -->
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary btn-block">Submit Payment</button>
+                </div>
+              </form>
+
+
+             
+               
+            </div> <!-- card-body.// -->
+            </div> <!-- card.// -->
+    
+       </aside> <!-- col.// -->
+    
+    
+    </div> <!-- row.// -->
+    <!-- ============================ COMPONENT 1 END .// ================================= -->
+    
+    </div> <!-- container .//  -->
+   
+
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<script>
+    // Correctly obtain the CSRF token from the cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+  
+    var csrfToken = getCookie('csrftoken'); // Get the CSRF token from the cookie
+  
+    var url = "{% url 'create_charge' %}";
+    var success = "{% url 'order_completed' %}";
+    var orderID = "{{order.order_number}}";
+    var payment_method = 'Stripe';
+    
+    
+    var stripe = Stripe('pk_test_51PEwENEMKhA1kqzwTSnB3X7uxp6jPw5p5hzepu8Ez9w6nO783oyGZmUUL9eBge4zIb6prnmr52BGVrZQAH2n74qr00lqN6EWOA');
+    var elements = stripe.elements();
+    var style = {
+      base: {
+        fontSize: '16px',
+        color: "#32325d",
+      }
+    };
+    
+    var card = elements.create('card', {style: style});
+    card.mount('#card-element');
+    
+    card.addEventListener('change', function(event) {
+      var displayError = document.getElementById('card-errors');
+      if (event.error) {
+        displayError.textContent = event.error.message;
+      } else {
+        displayError.textContent = '';
+      }
+    });
+  
+    var form = document.getElementById('payment-form');
+  
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+  
+      stripe.createToken(card).then(function(result) {
+        if (result.error) {
+          var errorElement = document.getElementById('card-errors');
+          errorElement.textContent = result.error.message;
+        } else {
+          stripeTokenHandler(result.token);
+        }
+      });
+    });
+  
+    function stripeTokenHandler(token) {
+      // Get additional data from the form if needed
+      
+      fetch(url, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify({
+              stripeToken: token.id,
+              orderID: orderID,
+              payment_method: payment_method,
+              // Add other form data here
+          })
+      }).then(function(response) {
+          return response.json();
+      }).then(function(data) {
+          if (data.status === 'Success') {
+              // Handle the success response
+              console.log('Order Number:', data.order_number);
+              console.log('Transaction ID:', data.transaction_id);
+  
+              // Redirect to a success page or display a success message
+              window.location.href = '/orders/order_completed/?order_number=' + data.order_number + '&transaction_id=' + data.transaction_id;
+          } else {
+              // Handle errors
+              console.error(data.message);
+              var errorElement = document.getElementById('card-errors');
+              errorElement.textContent = data.message;
+          }
+      }).catch(function(error) {
+          // Handle network errors
+          console.error('Network error:', error);
+      });
+  }
+  </script>
+
+  
+{% endblock %}
