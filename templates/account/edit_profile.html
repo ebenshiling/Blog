@@ -1,0 +1,134 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %}
+
+
+<section class="section-conten padding-y bg">
+
+    {% include 'includes/alerts.html' %}
+
+    <div class="container">
+        <div class="row">
+        {% include 'includes/dashboard_sidebar.html' %}
+        <main class="col-md-9">
+            <article class="card">
+            <header class="card-header">
+                <strong class="d-inline-block mr-3">Edit Your Profile</strong>
+                
+            </header>
+            <div class="card-body">
+                <div class="text-right">
+                    <img src="{{userprofile.profile_picture.url}}" alt="User Profile Picture" width="100" height="100"  style="border-radius: 50px;" >
+                </div>
+                <div class="row">  
+                 <div class="col-md-12">
+
+                <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="first_name">First Name</label>
+                                {{user_form.first_name}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="last_name">Last Name</label>
+                                {{user_form.last_name}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="first_name">Phone Number</label>
+                              {{user_form.phone_number}}
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="last_name">Profile Picture</label>
+                              {{profile_form.profile_picture}}
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label >Address Line 1</label>
+                    {{profile_form.address_line_1}}
+                  </div>
+                  <div class="form-group">
+                    <label >Address Line 2</label>
+                    {{profile_form.address_line_2}}
+                    
+                  </div>
+                  <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="first_name">Ciity</label>
+                           {{profile_form.city}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="last_name">State</label>
+                            {{profile_form.state}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                          <label for="last_name">Country</label>
+                          {{profile_form.country}}
+                      </div>
+                  </div>
+                </div>
+                 <input type="submit" value="save" class="btn btn-primary">
+                </form> 
+                    
+                 </div>
+
+
+                </div> <!-- row.// -->
+            </div> <!-- card-body .// -->
+            
+            </article> <!-- order-group.// --> 
+        </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+

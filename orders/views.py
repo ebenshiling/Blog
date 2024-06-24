@@ -145,17 +145,17 @@ def create_charge(request):
             CartItem.objects.filter(user=user).delete()
             
             # Send an order received email to the customer
-            # mail_subject = 'Thank You For Your Order'
-            # message = render_to_string('orders/order_received_email.html', {
-            #     'user': request.user,
-            #     'order': order,
-            #     'current_year': timezone.now().year,
+            mail_subject = 'Thank You For Your Order'
+            message = render_to_string('orders/order_received_email.html', {
+                'user': request.user,
+                'order': order,
+                'current_year': timezone.now().year,
               
-            # })
-            # to_email = request.user.email
-            # send_email = EmailMessage (mail_subject, message, to=[to_email])
-            # send_email.content_subtype = 'html'
-            # send_email.send()
+            })
+            to_email = request.user.email
+            send_email = EmailMessage (mail_subject, message, to=[to_email])
+            send_email.content_subtype = 'html'
+            send_email.send()
             # Send order number and transaction id back to sendData method via JsonResponse 
 
             # If the charge is successful, return a JSON response

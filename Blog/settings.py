@@ -11,17 +11,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import environ
+from decouple import config
 import os
 
 
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
+
 # reading .env file
-environ.Env.read_env()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,10 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_1-rv3(9ti@#mtsx1z82#y*0odu#u#*uib%%8^ivpw1eiy3v@d'
-
+SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -156,17 +152,17 @@ MESSAGE_TAGS = {
 }
 #smtp configuration
 # configure email to send emails
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_HOST = config('EMAIL_HOST')
 
 # Credentials (if needed)
-EMAIL_HOST_USER = 'baeshilling@gmail.com'
-EMAIL_HOST_PASSWORD = 'nokqujxebazfsvll'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # d:/Learning Django and projects/Blog App/Blog/settings.py
-STRIPE_PUBLIC_KEY = 'pk_test_51PEwENEMKhA1kqzwTSnB3X7uxp6jPw5p5hzepu8Ez9w6nO783oyGZmUUL9eBge4zIb6prnmr52BGVrZQAH2n74qr00lqN6EWOA'
-STRIPE_SECRET_KEY = 'sk_test_51PEwENEMKhA1kqzwjqkF2kjFbrGr5NXfyB04JaG5WjiGunNd05NR88L38eoge5HOuPC3tVL0LPcqivDSW6nv47sw00yaDHGC3b'
-STRIPE_WEBHOOK_SECRET_KEY = 'whsec_7eYbP9x3Ry9V0bDhjU6zq4WtG6WpQqRJ'
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET_KEY = config('STRIPE_WEBHOOK_SECRET_KEY')
 

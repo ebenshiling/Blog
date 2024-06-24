@@ -53,6 +53,18 @@
 			<figcaption class="info-wrap">
 				<a href="{{product.get_url}}" class="title">{{product.product_name}}</a>
 				<div class="price mt-1">GHS {{product.price}}</div> <!-- price-wrap.// -->
+				
+				<div class="star-rating">
+					<span>
+						<i class="fa {% if product.averageReview < 0.5 %}fa-star-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}fa-star-half-o{% else %}fa-star{% endif %}" aria-hidden="true"></i>
+						<i class="fa {% if product.averageReview < 1.5 %}fa-star-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}fa-star-half-o{% else %}fa-star{% endif %}" aria-hidden="true"></i>
+						<i class="fa {% if product.averageReview < 2.5 %}fa-star-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}fa-star-half-o{% else %}fa-star{% endif %}" aria-hidden="true"></i>
+						<i class="fa {% if product.averageReview < 3.5 %}fa-star-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}fa-star-half-o{% else %}fa-star{% endif %}" aria-hidden="true"></i>
+						<i class="fa {% if product.averageReview < 4.5 %}fa-star-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}fa-star-half-o{% else %}fa-star{% endif %}" aria-hidden="true"></i> 
+						 
+					</span>
+				</div> <!-- star-rating.// -->
+				
 			</figcaption>
 		</div>
 	</div> <!-- col.// -->
